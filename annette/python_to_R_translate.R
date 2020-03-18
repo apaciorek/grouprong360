@@ -58,7 +58,8 @@ lil <- lil %>%
 # and faceting by approval rates - high or low
 
 ggplot(lil, aes(x = total_pv, y = apply_num, color = result_rate)) +
-  geom_point() + facet_wrap(~ result_rate)
+  geom_point()
+#+ facet_wrap(~ result_rate)
 
 # want to investigate some of the data points further
 
@@ -72,6 +73,8 @@ curious_1 <- all_merged %>%
 
 
 # what if we use all_merged data instead as our jumpoff point
+# same code as above but using all_merged 
+# instead of Lilliana's merging
 
 user_lil <- all_merged %>%
   select(., user_id, 
@@ -94,4 +97,38 @@ ggplot(v2_lil, aes(x = total_pv, y = apply_num, color = result_rate)) +
   geom_point() + 
   facet_wrap(~ result_rate) +
   coord_cartesian(ylim = c(0,500), xlim = c(0,10000))
+
+###################################################################
+
+
+# Exploring products with high approval rates
+
+lil %>%
+  filter(., av_result == 1) %>%
+  #filter(., total_pv > 400)
+  ggplot(., aes(x = total_pv, y = apply_num)) +
+    geom_point() +
+    coord_cartesian(ylim = c(0,150), xlim = c(0,400))
+
+# Exploring in full merged data
+
+prod_ord_user %>%
+  group_by(product_id) %>%
+  summarise(., total_pv = sum(pv),
+            av_result = mean(result))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
