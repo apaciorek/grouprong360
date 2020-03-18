@@ -76,8 +76,22 @@ curious_1 <- all_merged %>%
 user_lil <- all_merged %>%
   select(., user_id, 
          product_id, 
-         pv_apply_total, 
+         pv_apply_total,
+         apply_num,
          pv, 
          application_limit, 
          result)
+
+v2_lil <- user_lil %>%
+  group_by(product_id, apply_num) %>%
+  summarise(total_pv = sum(pv),
+            av_result = mean(result))
+
+v2_lil <- v2_lil %>%
+  mutate(., result_rate = ifelse(av_result <.5, "low", "high"))
+
+ggplot(v2_lil, aes(x = total_pv, y = apply_num, color = result_rate)) +
+  geom_point() + 
+  facet_wrap(~ result_rate) +
+  coord_cartesian(ylim = c(0,500), xlim = c(0,10000))
 
