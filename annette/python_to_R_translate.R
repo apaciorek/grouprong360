@@ -2,6 +2,7 @@ setwd("~/Downloads/Rong360capstoneproject/annette")
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(randomForest)
 
 # reading in Jen's full merged dat a set - with duplicates removed
 
@@ -314,7 +315,54 @@ chisq.test(ctable19)
 
 # checking chash_receipts_n
 
+# random foresy for feature importance
 
+# cleaning the data frame to traina random forest
+
+# first we check how many NAs each column has
+
+colSums(is.na(trimmed_ord_qual))
+
+# return the names of the columns with NAs
+na_names <- colnames(trimmed_ord_qual)[!complete.cases(t(trimmed_ord_qual))]
+na_names
+na_names <- as.name(na_names)
+na_names
+clean_names <- lapply(na_names, as.name)
+clean_names <- unlist(clean_names)
+
+for (val in clean_names) {
+  print(val)
+  print(sort(table(trimmed_ord_qual[[val]]), decreasing = TRUE))
+  print("")
+  print("#####################")
+  print("")
+}
+
+lapply()
+
+
+sort(table(trimmed_ord_qual$op_type), decreasing = TRUE)
+
+# the columns with NAs are op_type,
+# col_type, _user_loan_experience, user_has_car,
+# user_social_security, 
+
+set.seed(0)
+train = sample(1:nrow(trimmed_ord_qual), 8*nrow(trimmed_ord_qual)/10) #Training indices.
+toq.test = trimmed_ord_qual[-train, ] #Test dataset.
+toq.test = trimmed_ord_qual$result[-train] #Test resp
+
+toq.train = trimmed_ord_qual[train, ] # training set is all indices that match our sample
+toq.test = trimmed_ord_qual[-train, ] # test set is everything else
+
+set.seed(0)
+rf.toq = randomForest(result ~ ., data = toq.train, importance = T,
+                     do.trace = 50, na.action = na.omit)
+rf.toq
+
+importance(rf.toq)
+varImpPlot(rf.toq)
 
 
 
