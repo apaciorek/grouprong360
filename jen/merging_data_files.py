@@ -16,6 +16,7 @@ print('size of quality.final:', quality_final.shape)
 ## the first three are easy to use a left-join with the training data
 joined = order_train.merge(product_final, on='product_id', how='left')
 print('size of order_train left-joined with product.final:', joined.shape)
+joined.to_csv('../order_product.csv', index=False)
 joined = joined.merge(user_final, on='user_id', how='left', 
     suffixes=('_order', '_user'))
 print('size when again left-joined with user.final:', joined.shape)
@@ -56,5 +57,9 @@ totaldf = joined.merge(quality_final, on=['user_id', 'bank_id',
 
 print('size of total dataframe:', totaldf.shape)
 totaldf.to_csv('../all_merged_data.csv', index=False)
+
+order_quality = order_train.merge(quality_final, on=['user_id'], how='left')
+order_quality.to_csv('../order_quality.csv', index=False)
+
 
 
