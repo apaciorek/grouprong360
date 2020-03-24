@@ -18,7 +18,7 @@ order_train <- read.delim("../order_train.txt")
 
 # OR faster to load it from csv: uncomment below and run:
 
-# clean_quality <- read.csv("clean_quality_in_r.csv")
+clean_quality <- read.csv("clean_quality_inr.csv")
 
 # join our new data frame which had duplicates removed with order train
 
@@ -35,6 +35,11 @@ trimmed_ord_qual <- order_and_qual[,
 
 # see which columns remain in our data frame
 names(trimmed_ord_qual)
+
+#trimmed_ord_qual <- trimmed_ord_qual %>%
+ # select(., -c(user_id))
+
+#write.csv(trimmed_ord_qual, 'nobuckets_order_quality_df.csv', row.names = F)
 
 # random foresy for feature importance
 
@@ -400,3 +405,5 @@ d_f <- d_f %>%
 ######################################################################################
 
 write.csv(d_f, 'new_rf_order_quality_df.csv', row.names = F)
+
+uniqueproduct_df <- unique(product_df)
